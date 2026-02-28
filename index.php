@@ -70,11 +70,12 @@
         .train-marker img { width: 100%; height: auto; border-radius: 50%; border: 3px solid var(--thomas-red); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 
         .alert-box { 
-            margin-top: auto; padding: 15px; border-radius: 12px; border: 4px solid var(--thomas-blue); 
+            margin-top: 15px; padding: 15px; border-radius: 12px; border: 4px solid var(--thomas-blue); 
             background: var(--thomas-yellow); display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            flex: 1; overflow-y: auto;
         }
-        .alert-header { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; color: var(--thomas-blue); letter-spacing: 1px; border-bottom: 2px solid var(--thomas-red); padding-bottom: 4px; margin-bottom: 4px; }
-        .alert-content { font-size: 0.9rem; line-height: 1.3; color: var(--thomas-blue); font-weight: 900; }
+        .alert-header { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; color: var(--thomas-blue); letter-spacing: 1px; border-bottom: 2px solid var(--thomas-red); padding-bottom: 4px; margin-bottom: 4px; flex-shrink: 0; }
+        .alert-content { font-size: 1.1rem; line-height: 1.4; color: var(--thomas-blue); font-weight: 900; }
         .alert-status-good { color: var(--thomas-blue); }
         .alert-status-bad { color: var(--thomas-red); }
     </style>

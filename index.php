@@ -15,7 +15,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="https://www.otbdesign.com/metro/img/icon.png">
     <link rel="apple-touch-icon" sizes="167x167" href="https://www.otbdesign.com/metro/img/icon.png">
 
-    <link rel="manifest" href="https://www.otbdesign.com/metro/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <title>Choo Choo Tracker</title>
     <style>
         :root { 
@@ -112,11 +112,11 @@
         const MAP_CONFIG = {
             work: {
                 stations: [{ name: 'Van Ness', y: 30 }, { name: 'Cleveland Park', y: 95 }, { name: 'WOODLEY PARK', y: 160, bold: true }],
-                img: 'https://www.otbdesign.com/metro/img/thomas.png', direction: "1" 
+                img: 'img/thomas.png', direction: "1"
             },
             home: {
                 stations: [{ name: 'NoMa', y: 30 }, { name: 'Union Station', y: 95 }, { name: 'JUDICIARY 🟥', y: 160, bold: true }],
-                img: 'https://www.otbdesign.com/metro/img/percy.png', direction: "2"
+                img: 'img/percy.png', direction: "2"
             }
         };
 

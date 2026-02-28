@@ -1,26 +1,26 @@
 {
-"short_name": "Choo Choo",
-"name": "DC Commute Tracker",
-"icons": [
-{
-"src": "https://www.otbdesign.com/metro/img/icon.png",
-"sizes": "192x192",
-"type": "image/png"
-},
-{
-"src": "https://www.otbdesign.com/metro/img/icon.png",
-"sizes": "512x512",
-"type": "image/png"
-},
-{
-"src": "https://www.otbdesign.com/metro/img/icon.png",
-"sizes": "1024x1024",
-"type": "image/png",
-"purpose": "any"
-}
-],
-"start_url": "https://www.otbdesign.com/metro/index.php",
-"display": "standalone",
-"theme_color": "#00529C",
-"background_color": "#00529C"
+    "short_name": "Choo Choo",
+    "name": "DC Commute Tracker",
+    "icons": [
+        {
+            "src": "img/icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "img/icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "img/icon.png",
+            "sizes": "1024x1024",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ],
+    "start_url": "index.php",
+    "display": "standalone",
+    "theme_color": "#00529C",
+    "background_color": "#00529C"
 }

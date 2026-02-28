@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
     <!-- iOS PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Choo Choo">
-    
+
     <!-- iOS Icon - Must be absolute and non-transparent for best results -->
     <link rel="apple-touch-icon" href="https://www.otbdesign.com/metro/img/icon.png">
     <link rel="apple-touch-icon" sizes="152x152" href="https://www.otbdesign.com/metro/img/icon.png">
@@ -18,7 +20,7 @@
     <link rel="manifest" href="manifest.json">
     <title>Choo Choo Tracker</title>
     <style>
-        :root { 
+        :root {
             --thomas-blue: #00529C;
             --thomas-baby-blue: #77B5FE;
             --thomas-red: #C60C30;
@@ -27,59 +29,274 @@
             --text-dark: #003366;
             --system-orange: #ff9f0a;
         }
-        body { 
-            font-family: -apple-system, Helvetica, Arial, sans-serif; 
-            background: var(--thomas-blue); color: #fff; margin: 0; padding: 15px; 
+
+        body {
+            font-family: -apple-system, Helvetica, Arial, sans-serif;
+            background: var(--thomas-blue);
+            color: #fff;
+            margin: 0;
+            padding: 15px;
             padding-top: env(safe-area-inset-top);
             -webkit-font-smoothing: antialiased;
-            display: flex; flex-direction: column; min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        .header { border-bottom: 3px solid var(--thomas-red); margin-bottom: 15px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; background: var(--thomas-blue); }
-        h1 { font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin: 0; color: var(--thomas-yellow); text-shadow: 2px 2px #000; }
-        #update-tick { font-size: 0.7rem; color: #fff; font-weight: 600; }
 
-        .route-section { margin-bottom: 12px; border-radius: 12px; overflow: hidden; background: var(--card-bg); flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.4); border: 3px solid var(--thomas-red); }
-        .route-btn { 
-            width: 100%; padding: 18px; background: var(--card-bg); border: none;
-            color: var(--text-dark); text-align: left; font-size: 1.1rem; font-weight: 900;
-            display: flex; align-items: center; cursor: pointer; border-bottom: 2px solid rgba(0,0,0,0.1);
+        .header {
+            border-bottom: 3px solid var(--thomas-red);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            background: var(--thomas-blue);
         }
-        .route-btn i { margin-right: 12px; font-style: normal; font-size: 1.3rem; }
-        
-        .train-container { display: none; background: #fff; color: var(--text-dark); }
-        .train-container.active { display: block; height: auto; }
 
-        .train-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #eee; }
-        .train-row:last-child { border-bottom: none; }
-        
-        .destination { font-weight: 800; color: var(--text-dark); }
-        .arrival { font-weight: 900; font-size: 1.1rem; color: #000; }
-        .arrival.warning { color: #fff; background: var(--system-orange); padding: 4px 8px; border-radius: 6px; }
-        .arrival.danger { color: #fff; background: var(--thomas-red); padding: 4px 8px; border-radius: 6px; animation: pulse 1.5s infinite; }
-        .arrival.boarding { color: #fff; background: var(--thomas-blue); padding: 4px 10px; border-radius: 6px; font-size: 0.9rem; animation: pulse-blue 1s infinite; }
-
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-        @keyframes pulse-blue { 0% { box-shadow: 0 0 0px var(--thomas-blue); } 50% { box-shadow: 0 0 10px var(--thomas-blue); } 100% { box-shadow: 0 0 0px var(--thomas-blue); } }
-
-        .map-wrapper { display: none; margin-bottom: 15px; background: var(--thomas-baby-blue); border-radius: 15px; padding: 20px; height: 200px; position: relative; flex-shrink: 0; border: 3px solid var(--thomas-red); box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
-        .map-wrapper.active { display: block; }
-        .track-line { position: absolute; left: 30px; top: 30px; bottom: 30px; width: 6px; background: #444; border-radius: 3px; }
-        .station-node { position: absolute; left: 26px; width: 14px; height: 14px; background: var(--thomas-yellow); border: 2px solid #000; border-radius: 50%; transform: translateY(-50%); z-index: 2; }
-        .station-label { position: absolute; left: 50px; font-size: 0.8rem; color: var(--text-dark); transform: translateY(-50%); font-weight: 800; text-shadow: 1px 1px 0px rgba(255,255,255,0.5); }
-        .train-marker { position: absolute; left: 30px; width: 42px; height: 42px; transform: translate(-50%, -50%); z-index: 5; transition: top 2s linear; }
-        .train-marker img { width: 100%; height: auto; border-radius: 50%; border: 3px solid var(--thomas-red); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-
-        .alert-box { 
-            margin-top: 15px; padding: 15px; border-radius: 12px; border: 4px solid var(--thomas-blue); 
-            background: var(--thomas-yellow); display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            flex: 1; overflow-y: auto;
+        h1 {
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            color: var(--thomas-yellow);
+            text-shadow: 2px 2px #000;
         }
-        .alert-header { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; color: var(--thomas-blue); letter-spacing: 1px; border-bottom: 2px solid var(--thomas-red); padding-bottom: 4px; margin-bottom: 4px; flex-shrink: 0; }
-        .alert-content { font-size: 1.1rem; line-height: 1.4; color: var(--thomas-blue); font-weight: 900; }
-        .alert-status-good { color: var(--thomas-blue); }
-        .alert-status-bad { color: var(--thomas-red); }
+
+        #update-tick {
+            font-size: 0.7rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .route-section {
+            margin-bottom: 12px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--card-bg);
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            border: 3px solid var(--thomas-red);
+        }
+
+        .route-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--card-bg);
+            border: none;
+            color: var(--text-dark);
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .route-btn i {
+            margin-right: 12px;
+            font-style: normal;
+            font-size: 1.3rem;
+        }
+
+        .train-container {
+            display: none;
+            background: #fff;
+            color: var(--text-dark);
+        }
+
+        .train-container.active {
+            display: block;
+            height: auto;
+        }
+
+        .train-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .train-row:last-child {
+            border-bottom: none;
+        }
+
+        .destination {
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .arrival {
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: #000;
+        }
+
+        .arrival.warning {
+            color: #fff;
+            background: var(--system-orange);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .arrival.danger {
+            color: #fff;
+            background: var(--thomas-red);
+            padding: 4px 8px;
+            border-radius: 6px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .arrival.boarding {
+            color: #fff;
+            background: var(--thomas-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            animation: pulse-blue 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse-blue {
+            0% {
+                box-shadow: 0 0 0px var(--thomas-blue);
+            }
+
+            50% {
+                box-shadow: 0 0 10px var(--thomas-blue);
+            }
+
+            100% {
+                box-shadow: 0 0 0px var(--thomas-blue);
+            }
+        }
+
+        .map-wrapper {
+            display: none;
+            margin-bottom: 15px;
+            background: var(--thomas-baby-blue);
+            border-radius: 15px;
+            padding: 20px;
+            height: 200px;
+            position: relative;
+            flex-shrink: 0;
+            border: 3px solid var(--thomas-red);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .map-wrapper.active {
+            display: block;
+        }
+
+        .track-line {
+            position: absolute;
+            left: 30px;
+            top: 30px;
+            bottom: 30px;
+            width: 6px;
+            background: #444;
+            border-radius: 3px;
+        }
+
+        .station-node {
+            position: absolute;
+            left: 26px;
+            width: 14px;
+            height: 14px;
+            background: var(--thomas-yellow);
+            border: 2px solid #000;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .station-label {
+            position: absolute;
+            left: 50px;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            transform: translateY(-50%);
+            font-weight: 800;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+        }
+
+        .train-marker {
+            position: absolute;
+            left: 30px;
+            width: 42px;
+            height: 42px;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            transition: top 2s linear;
+        }
+
+        .train-marker img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+            border: 3px solid var(--thomas-red);
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .alert-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 4px solid var(--thomas-blue);
+            background: var(--thomas-yellow);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .alert-header {
+            font-size: 0.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--thomas-blue);
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--thomas-red);
+            padding-bottom: 4px;
+            margin-bottom: 4px;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            font-size: 1.1rem;
+            line-height: 1.4;
+            color: var(--thomas-blue);
+            font-weight: 900;
+        }
+
+        .alert-status-good {
+            color: var(--thomas-blue);
+        }
+
+        .alert-status-bad {
+            color: var(--thomas-red);
+        }
     </style>
 </head>
+
 <body>
 
     <div class="header">
@@ -153,13 +370,28 @@
             });
         }
 
+        const DESTINATION_MAP = {
+            "Shady Grv": "Shady Grove",
+            "Grsvnor": "Grosvenor",
+            "SilvrSpg": "Silver Spring",
+            "Forest G": "Forest Glen",
+            "Frnconia": "Franconia-Springfield",
+            "Hunting": "Huntington",
+            "Mt Vern": "Mt Vernon Sq",
+            "Col Hts": "Columbia Heights",
+            "Petworth": "Georgia Ave-Petworth",
+            "Tenley": "Tenleytown",
+            "TwinBrk": "Twinbrook",
+            "WhiteFl": "White Flint"
+        };
+
         async function fetchPredictions(stationCode, view) {
             const container = document.getElementById(view + '-trains');
             const config = MAP_CONFIG[view];
             try {
                 const res = await fetch(`api.php?type=prediction&station=${stationCode}`);
                 const data = await res.json();
-                
+
                 const filtered = data.Trains.filter(t => t.Group === config.direction)
                     .sort((a, b) => {
                         const valA = (a.Min === 'ARR' || a.Min === 'BRD') ? 0 : parseInt(a.Min);
@@ -178,14 +410,16 @@
                     else if (isArr || min <= 2) { cls = 'danger'; text = isArr ? 'ARRIVING' : t.Min + 'm'; }
                     else if (min <= 4) { cls = 'warning'; }
 
+                    const destName = DESTINATION_MAP[t.DestinationName] || t.DestinationName;
+
                     return `<div class="train-row">
-                        <span class="destination">${t.DestinationName} <span style="font-size:0.75rem; color:#666; font-weight: 500;">${t.Car || '-'} car</span></span>
+                        <span class="destination">${destName} <span style="font-size:0.75rem; color:#666; font-weight: 500;">${t.Car || '-'} car</span></span>
                         <span class="arrival ${cls}">${text}</span>
                     </div>`;
                 }).join('') : '<div class="train-row">No engines found.</div>';
 
                 updateMap(filtered);
-                document.getElementById('update-tick').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+                document.getElementById('update-tick').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             } catch (e) { container.innerHTML = '<div class="train-row">Offline</div>'; }
         }
 
@@ -225,4 +459,5 @@
         }, 10000);
     </script>
 </body>
+
 </html>

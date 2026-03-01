@@ -382,7 +382,8 @@
             "Petworth": "Georgia Ave-Petworth",
             "Tenley": "Tenleytown",
             "TwinBrk": "Twinbrook",
-            "WhiteFl": "White Flint"
+            "WhiteFl": "White Flint",
+            "Farragt N": "Farragut North"
         };
 
         async function fetchPredictions(stationCode, view) {
